@@ -3,8 +3,10 @@ package com.example.week5.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,5 +26,7 @@ public class Comment {
     private Member member;
 
     private String content;
-    private LocalDate commentDate;
+
+    @CreationTimestamp
+    private LocalDateTime commentDate;
 }

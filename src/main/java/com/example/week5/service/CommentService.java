@@ -1,6 +1,8 @@
 package com.example.week5.service;
 
 import com.example.week5.domain.Comment;
+import com.example.week5.domain.Post;
+import com.example.week5.dto.CommentDto;
 import com.example.week5.repository.CommentRepository;
 import com.example.week5.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +21,36 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
     @Transactional
-    public Comment registerPost(Comment comment) {
+    public Comment registerComment(Comment comment) {
         return commentRepository.save(comment);
     }
-    public List<Comment> getAllPosts() {
+    @Transactional
+    public void deleteComment(Long id){
+        commentRepository.deleteById(id);
+    }
+    @Transactional
+    public Comment updateComment(Long id, CommentDto commentDto){
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isPresent()) {
+            Comment comment = commentOptional.get();
+            if (commentDto.getContent() != null) {
+                commentDto.setContent(commentDto.getContent());
+            }
+            return commentRepository.save(comment);
+        } else {
+            throw new RuntimeException("Comment not found with id" + id);
+        }
+    }
+
+
+    public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
-    public Optional<Comment> getPostById(Long id) {
+    public Optional<Comment> getCommentById(Long id) {
         return commentRepository.findById(id);
+    }
+    public List<Comment> getCommentByPostId(Long id){
+        return commentRepository.findByPostId(id);
     }
 
 }
